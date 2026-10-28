@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent" android:layout_height="match_parent">
+
+      <androidx.core.widget.NestedScrollView
+          android:id="@+id/scrollContent"
+          android:layout_width="match_parent" android:layout_height="match_parent"
+          android:clipToPadding="false" android:fadeScrollbars="false"
+          android:fillViewport="true" android:overScrollMode="always"
+          android:scrollbarStyle="insideInset" android:scrollbars="vertical">
+
+       <LinearLayout
+           android:layout_width="match_parent" android:layout_height="wrap_content"
+           android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center_vertical" android:orientation="horizontal"
+            android:paddingStart="12dp" android:paddingTop="10dp" android:paddingEnd="12dp">
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:hint="Search faculty, subject or class"
+                app:boxCornerRadiusBottomEnd="24dp" app:boxCornerRadiusBottomStart="24dp"
+                app:boxCornerRadiusTopEnd="24dp" app:boxCornerRadiusTopStart="24dp"
+                app:startIconDrawable="@drawable/ic_search">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch" android:inputType="text" android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFilter"
+                style="@style/Widget.Material3.Button.IconButton.Outlined"
+                android:layout_width="48dp" android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="Filters"
+                app:icon="@drawable/ic_filter" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:scrollbars="none">
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipStatus"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:paddingStart="12dp" android:paddingEnd="12dp"
+                app:selectionRequired="true" app:singleLine="true" app:singleSelection="true">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAvailable" style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:checked="true" android:text="Available" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAssigned" style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Assigned" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipClosed" style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Closed" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAll" style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="All" />
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/tvOffline"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:background="@color/warning" android:gravity="center"
+            android:padding="6dp" android:text="You are offline. Showing saved posts."
+            android:textColor="@color/white" android:textSize="12sp" android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginStart="16dp" android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp" android:layout_marginBottom="4dp"
+            android:text="Swipe up to browse lecture posts"
+            android:textColor="@color/text_secondary" android:textSize="12sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPosts"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:clipToPadding="false" android:nestedScrollingEnabled="false"
+            android:overScrollMode="never" android:paddingBottom="120dp" />
+       </LinearLayout>
+      </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <include android:id="@+id/stateView" layout="@layout/view_state"
+        android:layout_width="match_parent" android:layout_height="match_parent" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabNew"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end" android:layout_margin="16dp"
+        android:backgroundTint="@color/brand_teal" android:text="New request"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_add" app:iconTint="@color/white" />
+</FrameLayout>

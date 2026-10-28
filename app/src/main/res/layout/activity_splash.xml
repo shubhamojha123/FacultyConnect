@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/brand_navy" android:gravity="center"
+    android:orientation="vertical" android:padding="32dp">
+
+    <FrameLayout
+        android:layout_width="128dp" android:layout_height="128dp"
+        android:background="@drawable/bg_logo_circle">
+        <ImageView
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:contentDescription="FacultyConnect logo"
+            android:src="@drawable/ic_launcher_foreground" />
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="24dp" android:text="FacultyConnect"
+        android:textColor="@color/white" android:textSize="30sp" android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="6dp" android:text="@string/tagline"
+        android:textColor="#B8C7DE" android:textSize="14sp" />
+
+    <ProgressBar
+        android:id="@+id/splashProgress"
+        android:layout_width="32dp" android:layout_height="32dp"
+        android:layout_marginTop="40dp" android:indeterminateTint="@color/white" />
+
+    <TextView
+        android:id="@+id/splashStatus"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" android:gravity="center"
+        android:textColor="@color/white" android:textSize="14sp" android:visibility="gone" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRetry"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" android:text="Retry" android:visibility="gone" />
+</LinearLayout>

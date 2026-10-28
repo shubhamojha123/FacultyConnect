@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFFFF</color>
+    <color name="brand_navy">#0B2447</color>
+    <color name="brand_teal">#0E8F9C</color>
+    <color name="bar_color">#0B2447</color>
+    <color name="color_primary">#0B2447</color>
+    <color name="color_on_primary">#FFFFFF</color>
+    <color name="color_primary_container">#D6E3FF</color>
+    <color name="color_on_primary_container">#0B2447</color>
+    <color name="bg_screen">#F4F6F9</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="text_primary">#12202F</color>
+    <color name="text_secondary">#566676</color>
+    <color name="divider">#DCE2E9</color>
+    <color name="status_available">#0A7C86</color>
+    <color name="status_assigned">#1B7F45</color>
+    <color name="status_closed">#667382</color>
+    <color name="type_replacement">#A85D00</color>
+    <color name="type_extra">#4A5FC1</color>
+    <color name="warning">#B26A00</color>
+    <color name="error">#C62828</color>
+    <color name="bubble_in">#E7ECF2</color>
+    <color name="bubble_in_text">#12202F</color>
+    <color name="bubble_out">#0A7C86</color>
+    <color name="bubble_out_text">#FFFFFF</color>
+</resources>

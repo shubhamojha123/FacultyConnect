@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment android:id="@+id/homeFragment" android:name="com.facultyconnect.app.ui.home.HomeFragment" android:label="FacultyConnect" />
+    <fragment android:id="@+id/scheduleFragment" android:name="com.facultyconnect.app.ui.schedule.ScheduleFragment" android:label="My Schedule" />
+    <fragment android:id="@+id/messagesFragment" android:name="com.facultyconnect.app.ui.messages.MessagesFragment" android:label="Messages" />
+    <fragment android:id="@+id/notificationsFragment" android:name="com.facultyconnect.app.ui.notifications.NotificationsFragment" android:label="Notifications" />
+    <fragment android:id="@+id/profileFragment" android:name="com.facultyconnect.app.ui.profile.ProfileFragment" android:label="Profile" />
+    <fragment android:id="@+id/createPostFragment" android:name="com.facultyconnect.app.ui.post.CreatePostFragment" android:label="Lecture Request" />
+    <fragment android:id="@+id/postDetailFragment" android:name="com.facultyconnect.app.ui.post.PostDetailFragment" android:label="Lecture Details" />
+    <fragment android:id="@+id/chatFragment" android:name="com.facultyconnect.app.ui.chat.ChatFragment" android:label="Chat" />
+    <fragment android:id="@+id/directoryFragment" android:name="com.facultyconnect.app.ui.directory.DirectoryFragment" android:label="Faculty Directory" />
+    <fragment android:id="@+id/editProfileFragment" android:name="com.facultyconnect.app.ui.profile.EditProfileFragment" android:label="Edit Profile" />
+</navigation>

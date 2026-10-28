@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical" android:orientation="horizontal"
+    android:paddingStart="16dp" android:paddingTop="12dp"
+    android:paddingEnd="16dp" android:paddingBottom="12dp">
+
+    <ImageView
+        android:id="@+id/ivAvatar" android:layout_width="52dp" android:layout_height="52dp"
+        android:contentDescription="Faculty avatar" />
+
+    <LinearLayout
+        android:layout_width="0dp" android:layout_height="wrap_content"
+        android:layout_marginStart="14dp" android:layout_weight="1" android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvName" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:ellipsize="end" android:maxLines="1"
+            android:textColor="@color/text_primary" android:textSize="16sp" android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvPost" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:ellipsize="end" android:maxLines="1"
+            android:textColor="@color/brand_teal" android:textSize="12sp" android:visibility="gone" />
+        <TextView
+            android:id="@+id/tvPreview" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="2dp" android:ellipsize="end" android:maxLines="1"
+            android:textColor="@color/text_secondary" android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginStart="8dp" android:gravity="end" android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvTime" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary" android:textSize="12sp" />
+        <TextView
+            android:id="@+id/tvBadge" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="6dp" android:background="@drawable/bg_badge"
+            android:gravity="center" android:minWidth="22dp" android:minHeight="22dp"
+            android:paddingStart="6dp" android:paddingEnd="6dp"
+            android:textColor="@color/white" android:textSize="12sp" android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,6 @@
+{
+  "name": "facultyconnect-rules-tests",
+  "private": true,
+  "scripts": { "test": "firebase emulators:exec --only firestore --project demo-facultyconnect \"node --test\"" },
+  "devDependencies": { "@firebase/rules-unit-testing": "^3.0.0", "firebase": "^10.12.0" }
+}

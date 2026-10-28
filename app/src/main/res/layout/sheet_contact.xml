@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tvSheetTitle"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textColor="@color/text_primary" android:textSize="20sp" android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tvSheetSub"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="2dp" android:layout_marginBottom="14dp"
+        android:textColor="@color/text_secondary" android:textSize="14sp" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/sheetProgress"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:indeterminate="true" android:visibility="invisible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnChat"
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:layout_marginTop="8dp" android:text="Message in FacultyConnect"
+        android:backgroundTint="@color/brand_teal" android:textColor="@color/white"
+        app:cornerRadius="14dp" app:icon="@drawable/ic_messages" app:iconTint="@color/white" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEmail" style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:layout_marginTop="10dp" android:text="Send an email"
+        app:cornerRadius="14dp" app:icon="@drawable/ic_email" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnTeams" style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:layout_marginTop="10dp" android:text="Open Teams / contact link"
+        app:cornerRadius="14dp" app:icon="@drawable/ic_link" />
+    <TextView
+        android:id="@+id/tvSheetNote"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" android:layout_marginBottom="8dp"
+        android:textColor="@color/text_secondary" android:textSize="12sp" />
+</LinearLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bar_color">#0A1018</color>
+    <color name="color_primary">#8DB6FF</color>
+    <color name="color_on_primary">#0B2447</color>
+    <color name="color_primary_container">#1D3A6B</color>
+    <color name="color_on_primary_container">#D6E3FF</color>
+    <color name="brand_teal">#3CC3D1</color>
+    <color name="bg_screen">#0F1620</color>
+    <color name="bg_card">#18212D</color>
+    <color name="text_primary">#E8EDF3</color>
+    <color name="text_secondary">#9DACBB</color>
+    <color name="divider">#2B3745</color>
+    <color name="bubble_in">#263242</color>
+    <color name="bubble_in_text">#E8EDF3</color>
+</resources>

@@ -1,0 +1,226 @@
+rules_version = '2';
+
+// FacultyConnect Firestore Security Rules.
+// New accounts remain unverified until an administrator approves them in Firebase.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- helpers ----------
+    function signedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function userDoc(id) { return get(/databases/$(database)/documents/users/$(id)); }
+    function isVerified() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(uid()))
+        && userDoc(uid()).data.verified == true;
+    }
+    // Role comes from a custom claim set only by an administrator script (functions/scripts/setRole.js).
+    function isCoordinator() {
+      return signedIn() && request.auth.token.get('role', '') in ['coordinator', 'admin'];
+    }
+    function validProfile(d) {
+      return d.fullName is string && d.fullName.size() >= 2 && d.fullName.size() <= 80
+        && d.department is string && d.department.size() >= 1 && d.department.size() <= 80
+        && d.designation is string && d.designation.size() <= 60
+        && d.subjects is list && d.subjects.size() <= 20
+        && d.teamsLink is string && d.teamsLink.size() <= 300
+        && d.photoUrl is string;
+    }
+
+    // ---------- users ----------
+    match /users/{userId} {
+      // Verified faculty can read verified profiles (directory). Anyone can read their own.
+      allow read: if signedIn() && (uid() == userId || (isVerified() && resource.data.verified == true));
+
+      // Registration starts unverified. Only an administrator can approve it in Firebase.
+      allow create: if signedIn() && uid() == userId
+        && request.resource.data.keys().hasOnly(['fullName','email','department','designation','subjects',
+             'photoUrl','teamsLink','verified','notifyMessages','notifyAssignments','createdAt'])
+        && request.resource.data.verified == false
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.notifyMessages is bool
+        && request.resource.data.notifyAssignments is bool
+        && validProfile(request.resource.data)
+        && request.resource.data.createdAt == request.time;
+
+      allow update: if signedIn() && uid() == userId
+        // Profile owners cannot edit email, approval status, or creation time.
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+            ['fullName','department','designation','subjects','photoUrl','teamsLink','notifyMessages','notifyAssignments'])
+          && validProfile(request.resource.data);
+
+      allow delete: if false;
+
+      // FCM tokens: private to the owner (the Cloud Function reads them with the Admin SDK).
+      match /devices/{tokenId} {
+        allow read, write: if signedIn() && uid() == userId;
+      }
+    }
+
+    // ---------- lecture posts ----------
+    function validDetails(d) {
+      return d.type in ['replacement', 'extra']
+        && d.subject is string && d.subject.size() >= 1 && d.subject.size() <= 100
+        && d.className is string && d.className.size() >= 1 && d.className.size() <= 60
+        && d.room is string && d.room.size() >= 1 && d.room.size() <= 40
+        && d.reason is string && d.reason.size() >= 1 && d.reason.size() <= 500
+        && d.get('teamsLink', '') is string && d.get('teamsLink', '').size() <= 300
+        && d.startAt is timestamp && d.endAt is timestamp && d.endAt > d.startAt;
+    }
+
+    match /lecturePosts/{postId} {
+      function isOwner() { return resource.data.posterId == uid(); }
+      function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
+      function asgAfter() { return getAfter(/databases/$(database)/documents/assignments/$(postId)).data; }
+
+      function ownerEdit() {
+        return isOwner() && resource.data.status == 'available' && request.resource.data.status == 'available'
+          && changed().hasOnly(['type','subject','className','room','reason','teamsLink','startAt','endAt','updatedAt'])
+          && validDetails(request.resource.data)
+          && request.resource.data.updatedAt == request.time;
+      }
+      function ownerClose() {
+        return isOwner() && resource.data.status in ['available', 'assigned']
+          && request.resource.data.status == 'closed'
+          && changed().hasOnly(['status','updatedAt'])
+          && request.resource.data.updatedAt == request.time
+          && (resource.data.status == 'available' || asgAfter().status == 'cancelled');
+      }
+      // Available -> Assigned requires the assignment document to be written in the SAME batch/transaction.
+      function ownerAssign() {
+        return isOwner() && resource.data.status == 'available' && request.resource.data.status == 'assigned'
+          && changed().hasOnly(['status','assignedToId','assignedToName','updatedAt'])
+          && request.resource.data.assignedToId != uid()
+          && asgAfter().status == 'confirmed'
+          && asgAfter().posterId == uid()
+          && asgAfter().assigneeId == request.resource.data.assignedToId
+          && request.resource.data.updatedAt == request.time
+          && userDoc(request.resource.data.assignedToId).data.verified == true;
+      }
+      function ownerCancel() {
+        return isOwner() && resource.data.status == 'assigned' && request.resource.data.status == 'available'
+          && changed().hasOnly(['status','assignedToId','assignedToName','updatedAt'])
+          && !('assignedToId' in request.resource.data)
+          && asgAfter().status == 'cancelled'
+          && request.resource.data.updatedAt == request.time;
+      }
+      function coordinatorClose() {
+        return isCoordinator() && resource.data.status == 'available'
+          && request.resource.data.status == 'closed'
+          && changed().hasOnly(['status','updatedAt'])
+          && request.resource.data.updatedAt == request.time;
+      }
+
+      allow read: if isVerified();
+      allow create: if isVerified()
+        && request.resource.data.keys().hasOnly(['posterId','posterName','posterDepartment','posterPhotoUrl',
+             'type','subject','className','room','reason','teamsLink','startAt','endAt','status','createdAt','updatedAt'])
+        && request.resource.data.posterId == uid()
+        && request.resource.data.status == 'available'
+        && request.resource.data.posterName is string
+        && validDetails(request.resource.data)
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if isVerified() && (ownerEdit() || ownerClose() || ownerAssign() || ownerCancel() || coordinatorClose());
+      allow delete: if false;   // posts are closed, never deleted
+    }
+
+    // ---------- assignments (document id == post id => at most one per post) ----------
+    match /assignments/{postId} {
+      function postAfter() { return getAfter(/databases/$(database)/documents/lecturePosts/$(postId)).data; }
+      function d() { return request.resource.data; }
+
+      allow read: if isVerified() && (uid() in resource.data.participantIds || isCoordinator());
+
+      allow create, update: if isVerified()
+        && d().keys().hasOnly(['postId','posterId','posterName','assigneeId','assigneeName','participantIds',
+             'status','type','subject','className','room','startAt','endAt','confirmedAt','updatedAt'])
+        && d().postId == postId
+        && d().posterId == uid()
+        && d().assigneeId != uid()
+        && d().participantIds == [uid(), d().assigneeId]
+        && (request.method == 'create' || resource.data.posterId == uid())
+        && postAfter().posterId == uid()
+        && d().subject == postAfter().subject
+        && d().startAt == postAfter().startAt
+        && d().endAt == postAfter().endAt
+        && ((d().status == 'confirmed' && postAfter().status == 'assigned' && postAfter().assignedToId == d().assigneeId)
+            || (d().status == 'cancelled' && postAfter().status in ['available', 'closed']));
+      allow delete: if false;
+    }
+
+    // ---------- conversations & messages ----------
+    match /conversations/{cid} {
+      // resource == null lets a participant check whether a conversation exists before creating it.
+      allow read: if isVerified() && (resource == null || uid() in resource.data.participants);
+
+      allow create: if isVerified()
+        && request.resource.data.keys().hasOnly(['participants','participantNames','participantPhotos','postId',
+             'postSubject','lastMessage','lastSenderId','unread','createdAt'])
+        && request.resource.data.participants.size() == 2
+        && uid() in request.resource.data.participants
+        && request.resource.data.participants[0] != request.resource.data.participants[1]
+        && userDoc(request.resource.data.participants[0]).data.verified == true
+        && userDoc(request.resource.data.participants[1]).data.verified == true
+        && request.resource.data.lastMessage == ''
+        && request.resource.data.createdAt == request.time;
+
+      // Participants may only touch the summary fields (preview, time, sender, unread counters).
+      allow update: if isVerified() && uid() in resource.data.participants
+        && request.resource.data.participants == resource.data.participants
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['lastMessage','lastMessageAt','lastSenderId','unread']);
+      allow delete: if false;
+
+      match /messages/{mid} {
+        function conv() { return get(/databases/$(database)/documents/conversations/$(cid)).data; }
+        function convAfter() { return getAfter(/databases/$(database)/documents/conversations/$(cid)).data; }
+
+        allow read: if isVerified() && uid() in conv().participants;
+
+        // Sender identity comes from the auth token, never from client-supplied fields.
+        allow create: if isVerified() && uid() in convAfter().participants
+          && request.resource.data.keys().hasOnly(['senderId','text','readBy','createdAt'])
+          && request.resource.data.senderId == uid()
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 2000
+          && request.resource.data.readBy == [uid()]
+          && request.resource.data.createdAt == request.time;
+
+        // The recipient may add themselves to readBy; nothing else can change. Messages are never deleted.
+        allow update: if isVerified() && uid() in conv().participants
+          && resource.data.senderId != uid()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readBy'])
+          && request.resource.data.readBy.hasAll(resource.data.readBy)
+          && request.resource.data.readBy.size() <= resource.data.readBy.size() + 1;
+        allow delete: if false;
+      }
+    }
+
+    // ---------- notifications (readable only by the recipient) ----------
+    match /notifications/{nid} {
+      function nkeys() { return ['toUid','fromUid','fromName','type','title','body','refType','refId','read','createdAt']; }
+      function nValid(n) {
+        return n.keys().hasOnly(nkeys())
+          && n.fromUid == uid() && n.toUid != uid()
+          && n.type in ['message','assignment_confirmed','assignment_cancelled','post_closed']
+          && n.read == false
+          && n.title is string && n.title.size() <= 120
+          && n.body is string && n.body.size() <= 200
+          && n.createdAt == request.time;
+      }
+      allow read: if isVerified() && resource.data.toUid == uid();
+      allow create: if isVerified() && nValid(request.resource.data);
+      allow update: if isVerified() && (
+        // recipient marks as read
+        (resource.data.toUid == uid()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']))
+        ||
+        // sender refreshes their own "new message" notification
+        (resource.data.fromUid == uid() && request.resource.data.toUid == resource.data.toUid
+          && nValid(request.resource.data))
+      );
+      allow delete: if false;
+    }
+  }
+}

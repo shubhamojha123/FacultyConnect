@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Lecture type" android:textColor="@color/text_secondary" android:textSize="13sp" />
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipTypeGroup"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        app:selectionRequired="true" app:singleSelection="true">
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipTypeAny" style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Any" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipTypeReplacement" style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Replacement" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipTypeExtra" style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Extra lecture" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" android:hint="Department contains">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etFilterDept" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:inputType="text" android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" android:hint="Subject contains">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etFilterSubject" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:inputType="text" android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPickDate" style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pick date" />
+        <TextView
+            android:id="@+id/tvFilterDate"
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:layout_weight="1"
+            android:text="Any date" android:textColor="@color/text_primary" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClearDate" style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Clear" />
+    </LinearLayout>
+</LinearLayout>

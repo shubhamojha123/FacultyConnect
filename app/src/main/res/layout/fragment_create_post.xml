@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:fillViewport="true"
+        android:clipToPadding="false" android:paddingBottom="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Request type" android:textColor="@color/text_secondary" android:textSize="13sp" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleType"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            app:checkedButton="@+id/btnReplacement" app:selectionRequired="true" app:singleSelection="true">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReplacement" style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                android:text="Lecture Replacement" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnExtra" style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                android:text="Extra Lecture" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSubject" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="14dp" android:hint="Subject">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSubject" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:inputType="textCapWords" android:maxLength="100" android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilClass" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:hint="Class / year / division / batch">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etClass" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:inputType="textCapCharacters|textNoSuggestions" android:maxLength="60" android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDate" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:hint="Lecture date">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDate" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:clickable="true" android:focusable="false" android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilStart" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp" android:layout_weight="1" android:hint="Start time">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etStart" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:clickable="true" android:focusable="false" android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEnd" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginStart="6dp" android:layout_weight="1" android:hint="End time">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEnd" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:clickable="true" android:focusable="false" android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRoom" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:hint="Classroom / location">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRoom" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:inputType="textCapCharacters|textNoSuggestions" android:maxLength="40" android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilReason" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:hint="Reason / additional details"
+            app:counterEnabled="true" app:counterMaxLength="500">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etReason" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:gravity="top" android:inputType="textMultiLine|textCapSentences"
+                android:maxLength="500" android:minLines="3" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilTeamsLink" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:hint="Lecture Teams link (optional, https://)"
+            app:helperText="Colleagues can open this meeting link from the post">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTeamsLink" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:inputType="textUri" android:maxLength="300" android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvError"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" android:textColor="@color/error"
+            android:textSize="13sp" android:visibility="gone" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:indeterminate="true" android:visibility="invisible" />
+
+    </LinearLayout>
+    </ScrollView>
+
+    <!-- Keep the primary actions visible while the form fields scroll. -->
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:paddingStart="16dp" android:paddingEnd="16dp"
+        android:paddingTop="8dp" android:paddingBottom="8dp" android:background="@color/bg_card">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel" style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp" android:layout_height="56dp" android:layout_marginEnd="6dp"
+            android:layout_weight="1" android:text="Cancel" app:cornerRadius="14dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubmit"
+            android:layout_width="0dp" android:layout_height="56dp" android:layout_marginStart="6dp"
+            android:layout_weight="1" android:text="Publish"
+            android:backgroundTint="@color/brand_teal" android:textColor="@color/white"
+            app:cornerRadius="14dp" />
+    </LinearLayout>
+</LinearLayout>

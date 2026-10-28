@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/bg_screen" android:gravity="center"
+    android:orientation="vertical" android:padding="28dp">
+
+    <ImageView
+        android:layout_width="72dp" android:layout_height="72dp"
+        android:contentDescription="Verification"
+        android:src="@drawable/ic_email" app:tint="@color/brand_teal" />
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" android:text="Verification"
+        android:textColor="@color/text_primary" android:textSize="22sp" android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" android:gravity="center"
+        android:textColor="@color/text_secondary" android:textSize="15sp" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" android:indeterminate="true" android:visibility="invisible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:layout_marginTop="12dp" android:text="Check again"
+        android:backgroundTint="@color/brand_navy" android:textColor="@color/white"
+        app:cornerRadius="14dp" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnResend"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent" android:layout_height="56dp"
+        android:layout_marginTop="10dp" android:text="Resend verification email"
+        app:cornerRadius="14dp" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSignOut"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" android:text="Sign out" />
+</LinearLayout>
