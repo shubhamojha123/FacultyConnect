@@ -2,7 +2,6 @@ package com.facultyconnect.app.data
 
 import com.facultyconnect.app.model.AppNotification
 import com.google.firebase.firestore.MetadataChanges
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -11,13 +10,24 @@ import kotlinx.coroutines.tasks.await
 class NotificationRepository {
     private val col = Fb.db.collection(Col.NOTIFICATIONS)
 
-    /** Needs composite index: notifications (toUid ASC, createdAt DESC). */
+    /**
+     * Filter on the automatically indexed recipient field, then sort locally. This avoids requiring a
+     * deployed composite index just to open Alerts (which otherwise leaves the screen unusable until an
+     * administrator deploys firestore.indexes.json).
+     */
     fun observe(uid: String): Flow<Resource<List<AppNotification>>> = callbackFlow {
         trySend(Resource.Loading)
-        val reg = col.whereEqualTo("toUid", uid).orderBy("createdAt", Query.Direction.DESCENDING).limit(50)
+        val reg = col.whereEqualTo("toUid", uid)
             .addSnapshotListener(MetadataChanges.INCLUDE) { snap, err ->
                 if (err != null) trySend(Resource.Error(ErrorMapper.message(err)))
-                else if (snap != null) trySend(Resource.Success(snap.toObjects(AppNotification::class.java), snap.metadata.isFromCache))
+                else if (snap != null) {
+                    val items = snap.toObjects(AppNotification::class.java)
+                        .sortedWith(
+                            compareByDescending<AppNotification> { it.createdAt?.seconds ?: Long.MIN_VALUE }
+                                .thenByDescending { it.createdAt?.nanoseconds ?: 0 }
+                        )
+                    trySend(Resource.Success(items, snap.metadata.isFromCache))
+                }
             }
         awaitClose { reg.remove() }
     }
